@@ -1,0 +1,42 @@
+Nom : Atif
+Prénom : Hamza
+Groupe : 2A - ASR
+
+*********** Choix techniques lors de la réalisation de ce projet : ***********
+
+1. Gestion des processus avec un tableau statique :
+
+J’ai utilisé un tableau statique (Processus table_processus[NB_PROCC_MAX]) pour gérer les processus. Ce choix permet un accès direct et rapide aux descripteurs, ainsi qu'une gestion simple de l’allocation et de la libération.
+
+2. Utilisation de variables globales :
+
+Des variables comme (processus_courant, compteur_pid, ou system_ticks) sont globales pour permettre un accès  dans tout le noyau. Cela simplifie l’architecture globale.
+
+3. Pagination – Recherche de page libre par bitmap :
+
+L’utilisation d’un bitmap (free_page_bitmap_table) pour représenter l’état de chaque page permet une gestion efficace de la mémoire : un seul bit par page. Ce choix comme vous l'avez suggéré dans le sujet est donc meilleure.
+
+4. Gestion du réveil des processus via temps_reveil :
+
+Chaque processus possède un champ temps_reveil, mis à jour lors d’un sleep(). Cela permet de gérer simplement les endormissements sans ajouter une file ou structure externe. (C’était déjà assez complexe à intégrer comme ça.) J'ai choisis un scheduler chaque 3secondes, sinon c'est trop rapide, mais vous pouvez le modifier dans time.c pour le faire chaque seconde.
+
+5. Gestion des interruptions avec un handler dédié :
+
+J’ai fait le choix d’avoir un fichier handler distinct pour chaque IRQ (IRQ50, clavier, timer). C’était pour moi une approche logique, chaque étape du projet ayant été développée de manière progressive (.c, .h, .S par fonctionnalité).
+
+*********** Tests réalisés ***********
+
+Tous les tests sont commentés dans start.c. On peut tester :
+- la pagination,
+- le timer,
+- les appels systèmes shutdown et write,
+- le clavier (sans support majuscules ni chiffres),
+- et bien sûr la gestion des processus (avec idle, processus1, processus2).
+
+Le basculement de processus via scheduler() déclenché par le timer fonctionne (voir les sleep() dans les fichiers processus1.c et processus2.c).
+
+*********** Commentaire final ***********
+
+1. Certains choix ont été personnels, d’autres inspirés de discussions en TP avec les camarades ou encore, comme tout le monde, de suggestions Copilot pour du debuggage ponctuel.
+
+2. Pour finir, j’ai vraiment apprécié ce projet. C’est le premier cette année où j’ai clairement ressenti une progression technique concrète. Ce n’était pas toujours facile (la pagination notamment), mais avec du debuggage et votre accompagnement en TP, on a réussi à finir ce projet.
